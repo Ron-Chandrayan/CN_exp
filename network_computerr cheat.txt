@@ -1,0 +1,163 @@
+client and server
+import socket
+s=socket.socket()
+s.bind(("127.0.0.1",5000))
+s.listen(1)
+print("Waiting for client: ")
+
+c,addr=s.accept()
+print("Client connected",addr)
+
+while True:
+    msg=c.recv(1024).decode()
+    if msg.lower() == "exit":
+        c.send("Goodbye".encode())
+        break
+    print("Client: ",msg)
+    reply=input("Server: ")
+    c.send((reply).encode())
+
+c.close()
+s.close()
+
+
+
+import socket 
+c=socket.socket()
+c.connect(("127.0.0.1",5000))
+
+while True:
+    msg = input("You: ")
+    c.send(msg.encode())
+    reply=c.recv(1024).decode()
+    print("Server: ",reply)
+    if msg.lower() == "exit":
+        break
+
+c.close()
+
+
+
+dhcp and ssh and telnet
+steps for ssh
+
+enable
+configure terminal
+hostname D1
+ip domain-name college.local
+username admin privilege 15 secret admin123
+crypto key generate rsa
+
+
+input ssh version 2
+line vty 0 4
+login local
+transport input ssh
+end
+
+
+ssh -l admin 192.168.10.1
+
+
+line vty 0 4
+password telnet123
+login 
+transport input telnet
+end
+
+wireshark
+<?php
+$username = $_GET["username"];
+$password = $_GET["password"];
+
+echo "Welcome " . htmlspecialchars($username);
+?>
+
+<form action="index.php" method="GET">
+    Username:
+    <input type="text" name="username">
+    <br>
+
+    Password:
+    <input type="password" name="password">
+    <br>
+
+    <input type="submit" value="Login">
+</form>
+
+
+static routing and dynamic routing
+
+show ip routes
+show ip protocols
+
+ip route destination and subnet mask hop
+
+dynamic
+
+enable
+configure terminal
+router rip
+version 2
+no auto-summary
+network 30.0.0.0 (inter router network)
+network 10.0.0.0 
+
+repeat for other router
+
+enable
+configure terminal
+router ospf 1
+network 10.0.0.0 0.0.0.255 area 0
+network 30.0.0.0 0.0.0.255 area 0
+end
+
+vlan experiment
+
+192.168.10.10 to  pc
+192.168.20.10 to another
+gateway will be 192.168.10.1
+similarly like that
+
+in switch
+enable
+configure terminal
+vlan 10
+name HR 
+exit
+
+repeat for 3
+
+now
+interface fa0/1
+switchport mode access
+switchport access vlan 10
+
+repeat for the other 2
+
+turn on the router
+
+now
+interface fa0/4 (connected to router)
+switchport mode trunk
+end
+
+now in router
+
+interface Gig0/0.10
+encapsulation dot1Q vlan 10
+ip address 192.168.10.1 255.255.255.0
+exit
+
+repeat for others
+
+Linux 
+
+ip link show
+ip addr show
+ping -c 4 127.0.0.1
+ip route show
+ping -c 4 8.8.8.8
+ping -c 4 google.com
+tracepath google.com
+sudo ufw status
